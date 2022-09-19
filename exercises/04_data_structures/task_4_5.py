@@ -30,6 +30,6 @@ command2 = command2.split()
 com2_vlan = command2[4].split(',')
 
 
-a = (set(com1_vlan) & set(com2_vlan))
-result = list(a)
+result = list((set(com1_vlan) & set(com2_vlan)))
+result.sort()
 print(result)
