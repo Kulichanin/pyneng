@@ -26,3 +26,11 @@
 """
 
 ip = "192.168.3.1"
+
+bin = ip.split(".")
+
+output = """
+{0:<10}{1:<10}{2:<10}{3:<10}
+{0:08b}  {1:08b}  {2:08b}  {3:08b}"""
+
+print(output.format(int(bin[0]), int(bin[1]), int(bin[2]), int(bin[3])))
