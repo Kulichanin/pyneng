@@ -63,3 +63,14 @@ trunk_template = [
     "switchport mode trunk",
     "switchport trunk allowed vlan {}",
 ]
+
+# Скрипт должен запрашивать у пользователя:
+
+template = dict(access=access_template, trunk=trunk_template)
+
+interface_mode = input('Ввидите режим интерфейса (access/trunk)?:')
+interface_number = input('Ввидите номер интерфейса (тип и номер, вида Gi0/3):')
+vlan_number = input('Ввидите номер VLANа (для режима trunk будет вводиться список VLANов):')
+
+print(f'interface {interface_number}')
+print('\n'.join(template[interface_mode]).format(vlan_number))
