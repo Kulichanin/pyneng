@@ -12,3 +12,16 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
+ip_address = input('Ввидите IP адрес:')
+ip_address = ip_address.split('.')
+if 1 <= int(ip_address[0]) <= 223:
+    print('unicast')
+elif 239 >= int(ip_address[0]) >= 224:
+    print('multicast')
+elif ip_address == ['0','0','0','0']:
+    print('unassigned')
+elif ip_address == ['255','255','255','255']:
+    print('local broadcast')
+else:
+    print('unused')
