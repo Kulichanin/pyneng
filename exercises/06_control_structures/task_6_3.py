@@ -82,32 +82,3 @@ trunk = {
 #         else:
 #             print(f" {command}")
 
-
-for intf, mode in trunk.items():
-    print(f'interface FastEthernet{intf}')
-    for command in trunk_template:
-        if command.endswith("allowed vlan"):
-            if mode[0] == 'add':
-                print(f" {command} add {','.join(mode[1:])}")
-                break
-            elif mode[0] == 'del':
-                print(f" {command} remove {','.join(mode[1:])}")
-                break
-            elif mode[0] == 'only':
-                print(f" {command} {','.join(mode[1:])}")
-                break
-        print(f" {command}")
-# этот вариант использует словарь, вместо if/else. Взят из решения. Очень крут!!!
-# trunk_actions = {"add": " add", "del": " remove", "only": ""}
-#
-# for intf, value in trunk.items():
-#     print(f"interface FastEthernet{intf}")
-#
-#     for command in trunk_template:
-#         if command.endswith("allowed vlan"):
-#             action = value[0]
-#             vlans = ",".join(value[1:])
-#             print(f" {command}{trunk_actions[action]} {vlans}")
-#         else:
-#             print(f" {command}")
-#
