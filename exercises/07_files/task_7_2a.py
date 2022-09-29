@@ -27,10 +27,6 @@ with open('config_sw1.txt', 'r') as file:
 """
 # Второй вариант более универсальный
 
-
-ignore = ["duplex", "alias", "configuration"]
-
-
 with open('config_sw1.txt', 'r') as f:
     for line in f:
         words = line.split()
