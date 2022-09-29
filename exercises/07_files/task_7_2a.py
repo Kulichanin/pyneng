@@ -17,3 +17,23 @@
 """
 
 ignore = ["duplex", "alias", "configuration"]
+
+"""
+with open('config_sw1.txt', 'r') as file:
+    a = [line.strip('\n') for line in file]
+    for i in a:
+        if not (i.find(ignore[0]) != -1 or i.find(ignore[1]) != -1 or i.find(ignore[2]) != -1 or i.find('!') != -1):
+            print(i)
+"""
+# Второй вариант более универсальный
+
+
+ignore = ["duplex", "alias", "configuration"]
+
+
+with open('config_sw1.txt', 'r') as f:
+    for line in f:
+        words = line.split()
+        words_intersect = set(words) & set(ignore)
+        if not line.startswith("!") and not words_intersect:
+            print(line.rstrip())
