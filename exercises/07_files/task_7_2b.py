@@ -17,3 +17,12 @@
 """
 
 ignore = ["duplex", "alias", "configuration"]
+
+file_open = input(f'имя исходного файла конфигурации:')
+file_save = input(f'имя итогового файла конфигурации:')
+
+with open(file_open, 'r') as file, open(file_save, 'w') as dest:
+    a = [line.strip('\n') for line in file]
+    for i in a:
+        if not (i.find(ignore[0]) != -1 or i.find(ignore[1]) != -1 or i.find(ignore[2]) != -1 or i.find('!') != -1):
+            dest.write(f'{i}\n')
