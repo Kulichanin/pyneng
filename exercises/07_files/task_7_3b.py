@@ -17,6 +17,7 @@ Enter VLAN number: 10
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+
 value = input('Ввидите номер VLAN: ')
 a = []
 with open('CAM_table.txt', 'r') as file:
