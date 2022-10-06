@@ -68,16 +68,8 @@ def generate_trunk_config(intf_vlan_mapping, trunk_template):
         list_of_all_ports.append(f"interface {intf}")
         for value in trunk_template:
             if value == "switchport trunk allowed vlan":
-                n_i = "".join(str(number_intf))
+                n_i = ",".join([str(n_i) for n_i in number_intf])
                 list_of_all_ports.append(f'{value} {n_i}')
             else:
                 list_of_all_ports.append(value)
-    print(list_of_all_ports)
-
-
-
-
-
-
-generate_trunk_config(trunk_config, trunk_mode_template)
-# generate_trunk_config(trunk_config_2, trunk_mode_template)
+    return list_of_all_ports
