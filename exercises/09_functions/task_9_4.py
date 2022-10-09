@@ -64,3 +64,22 @@ def ignore_command(command, ignore):
         if word in command:
             ignore_status = True
     return ignore_status
+
+
+def convert_config_to_dict(config_filename):
+    correct_return_value = {}
+    configuration_sheet_mask = ['switchport', 'ip', 'exec-timeout', 'privilege', 'logging', 'login', 'transport']
+    name_list = ['interface', 'con', 'vty']
+    with open(config_filename, 'r') as file:
+        for line in (file.read().strip()).split('\n'):
+            if '!' not in line and ignore_command(line, ignore) is False:
+                if (set(name_list).intersection(set(line.split(' ')))):
+                    name_vlan = line
+                    config_vlan = []
+                    correct_return_value[name_vlan] = []
+                elif (set(configuration_sheet_mask).intersection(set(line.split(' ')))):
+                    config_vlan.append(line.strip())
+                    correct_return_value[name_vlan] = config_vlan
+                else:
+                    correct_return_value[line] = []
+    return correct_return_value

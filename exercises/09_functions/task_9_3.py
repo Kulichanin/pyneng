@@ -41,5 +41,4 @@ def get_int_vlan_map(config_filename):
             config_vlan_trunk = config_vlan
             cvl = [int(b) for b in config_vlan_trunk[31:].split(',')]
             config_vlan_dict_trunk[vlan] = cvl
-    config_vlan_all = (config_vlan_dict_access, config_vlan_dict_trunk)
-    return config_vlan_all
+    return config_vlan_dict_access, config_vlan_dict_trunk

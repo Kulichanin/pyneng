@@ -25,3 +25,30 @@
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
+access_port_vlan_1 = ['interface FastEthernet', 'switchport mode access', 'duplex auto']
+
+def get_int_vlan_map(config_filename):
+    config_vlan_dict_access = {}
+    config_vlan_dict_trunk = {}
+
+    with open(config_filename, 'r') as file:
+        a = [line.strip('\n') for line in file]
+    for config_vlan in range(len(a)):
+        if 'interface FastEthernet' in a[config_vlan] and 'switchport mode access' in a[config_vlan+1] and 'duplex auto' in a[config_vlan+2]:
+            config_vlan_name = a[config_vlan]
+            config_vlan_dict_access[config_vlan_name[10:]] = 1
+        elif 'interface FastEthernet' in a[config_vlan]:
+            vlan = a[config_vlan][10:]
+        elif 'switchport access vlan' in a[config_vlan]:
+            config_vlan_access = a[config_vlan]
+            config_vlan_dict_access[vlan] = int(config_vlan_access[-2:])
+        elif 'switchport trunk allowed vlan' in a[config_vlan]:
+            config_vlan_trunk = a[config_vlan]
+            cvl = [int(b) for b in config_vlan_trunk[31:].split(',')]
+            config_vlan_dict_trunk[vlan] = cvl
+
+
+    return config_vlan_dict_access, config_vlan_dict_trunk
+
+print(get_int_vlan_map('config_sw2.txt'))
