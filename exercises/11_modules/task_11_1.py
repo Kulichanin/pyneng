@@ -43,8 +43,26 @@ def parse_cdp_neighbors(command_output):
     и с файлами и с выводом с оборудования.
     Плюс учимся работать с таким выводом.
     """
+    dictionary_show_cdp_neighbors = {}
+    # Port_ID = []
+    # Device_ID = []
+    # Local_Intf = []
+    # show_vlan_list = []
+    for line in command_output.split('\n'):
+        if 'show cdp neighbors' in line:
+            show_vlan = line
+            find_name_vlan = show_vlan.find('>')
+            show_vlan = show_vlan[:find_name_vlan]
+        elif 'Eth' in line:
+            find_name_vlan_and_options = line.split()
+            Device_ID = find_name_vlan_and_options[0]
+            Local_Intf = find_name_vlan_and_options[1] + find_name_vlan_and_options[2]
+            Port_ID = find_name_vlan_and_options[-2] + find_name_vlan_and_options[-1]
+            dictionary_show_cdp_neighbors[(show_vlan, Local_Intf)] = (Device_ID, Port_ID)
+
+    return dictionary_show_cdp_neighbors
 
 
 if __name__ == "__main__":
-    with open("sh_cdp_n_sw1.txt") as f:
+    with open("sh_cdp_n_r3.txt") as f:
         print(parse_cdp_neighbors(f.read()))
