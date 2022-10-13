@@ -80,13 +80,17 @@ infiles = [
     "sh_cdp_n_r2.txt",
     "sh_cdp_n_r3.txt",
 ]
-
 from task_11_2 import create_network_map
 from draw_network_graph import draw_topology
-def unique_network_map():
-    value = create_network_map(infiles)
-    draw_topology(value, 'test')
-# ! TODO Задача состоит в следующем обработать приходящий список таким образом чтобы убрать дублирующие строки
+def unique_network_map(topology_dict):
+    topology_dictvalue = create_network_map(topology_dict)
+    extra_connections = (set(topology_dictvalue.values()).intersection(set(topology_dictvalue.keys())))
+    list_extr_sort = list(extra_connections)
+    list_extr_sort.sort()
+    for connection in range(len(list_extr_sort) // 2):
+        del topology_dictvalue[list_extr_sort[connection]]
+    return topology_dictvalue
+    # draw_topology(topology_dictvalue, 'test_dis_extra_con')
 
 if __name__ == '__main__':
-    unique_network_map()
+    unique_network_map(input_value)

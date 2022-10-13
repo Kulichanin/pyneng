@@ -39,11 +39,15 @@ from task_11_1 import parse_cdp_neighbors
 
 def create_network_map(filenames):
     value = {}
-    for file in filenames:
-        with open(file, 'r') as line:
-            return_dis = parse_cdp_neighbors(line.read())
-            value.update(return_dis)
-    return value
+    if type(filenames) == dict:
+        value = filenames
+        return value
+    else:
+        for file in filenames:
+            with open(file, 'r') as line:
+                return_dis = parse_cdp_neighbors(line.read())
+                value.update(return_dis)
+        return value
 
 
 if __name__ == "__main__":
