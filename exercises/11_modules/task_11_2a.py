@@ -93,4 +93,4 @@ def unique_network_map(topology_dict):
     # draw_topology(topology_dictvalue, 'test_dis_extra_con')
 
 if __name__ == '__main__':
-    unique_network_map(input_value)
+    unique_network_map()

@@ -17,3 +17,14 @@ IP-адрес считается доступным, если выполнени
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+import subprocess
+def ping_ip_addresses(ip_addr):
+    available = []
+    not_availabel = []
+    for ip in ip_addr:
+        result = subprocess.run(['ping', '-c', '1', ip])
+        if result.returncode == 0:
+            available.append(ip)
+        else:
+            not_availabel.append(ip)
+    return available, not_availabel

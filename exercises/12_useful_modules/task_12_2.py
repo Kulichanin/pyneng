@@ -34,3 +34,22 @@
  '172.21.41.129', '172.21.41.130', '172.21.41.131', '172.21.41.132']
 
 """
+def convert_ranges_to_ip_list(list_ip):
+
+    list_full_ip = []
+    for ip in list_ip:
+        if '-' not in ip:
+            list_full_ip.append(ip)
+        else:
+            value = ip.split('-')
+            list_actet_ip = []
+            for actet_ip in value:
+                list_actet_ip.append((actet_ip.split('.'))[-1])
+            four_actet_ip = (value[0].split('.'))
+            for four_actet_ip[-1] in range(int(list_actet_ip[0]), int(list_actet_ip[1]) + 1):
+                new_actet_ip = [str(x) for x in four_actet_ip]
+                '.'.join(new_actet_ip)
+                list_full_ip.append('.'.join(new_actet_ip))
+
+    return list_full_ip
+
