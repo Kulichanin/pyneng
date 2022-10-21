@@ -25,12 +25,8 @@ import re
 
 
 def parse_sh_ip_int_br(name_file):
-    regex = re.compile(r'(?P<intf>\S+) +(?P<ip>[\d.]+) +\w+ +\w+ +(?P<Status>up|down|administratively down) +(?P<Protocol>up|down)')
-    with open(name_file) as f:
-        for line in f:
-            match = regex.search(line)
-            if match:
-                print(match.groups())
-
-
-parse_sh_ip_int_br('sh_ip_int_br.txt')
+    regex = re.compile(r'(\S+) +(\S+) +(\S+ \S+) +(up|down|administratively down) +(up|down)')
+    ip_groups = []
+    with open(name_file, 'r') as file:
+        [ip_groups.append(match.group(1, 2, 4, 5)) for match in regex.finditer(file.read())]
+    return ip_groups
