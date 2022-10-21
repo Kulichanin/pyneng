@@ -32,6 +32,7 @@ object network LOCAL_10.1.9.5
 
 Во всех правилах для ASA интерфейсы будут одинаковыми (inside,outside).
 """
+
 import re
 
 def convert_ios_nat_to_asa(conf_NAT_Cisco_IOS, conf_IOS_cisco_ASA):
