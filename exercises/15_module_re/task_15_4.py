@@ -24,3 +24,13 @@ interface Loopback0
 
 Проверить работу функции на примере файла config_r1.txt.
 """
+import re
+def get_ints_without_description(config_file):
+
+    match = re.compile(r"\ninterface (?P<name_inter>\S+)\n (?P<param>\w+)")
+    list_interface = []
+    with open(config_file, 'r') as file:
+        for match in match.finditer(file.read()):
+            if 'description' not in match.groups():
+                list_interface.append(match.group('name_inter'))
+    return list_interface
