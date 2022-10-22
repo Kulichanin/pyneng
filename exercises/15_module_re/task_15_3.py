@@ -36,4 +36,12 @@ object network LOCAL_10.1.9.5
 import re
 
 def convert_ios_nat_to_asa(conf_NAT_Cisco_IOS, conf_IOS_cisco_ASA):
-    regex = re.compile(r'tcp (?P<host>[\d.]+) (\d+) (\D+\S+) (\d+)')
+    regex = re.compile(r"tcp (?P<host>[\d.]+) (?P<port>\d+) (\D+\S+) (?P<port2>\d+)")
+    with open(conf_NAT_Cisco_IOS, 'r') as file:
+        with open(conf_IOS_cisco_ASA, 'w') as file_w:
+            for line in file:
+                match = regex.search(line)
+                if match:
+                    file_w.writelines(f"object network LOCAL_{match.group('host')}\n host {match.group('host')}\n nat "
+                                      f"(inside,outside) static interface service "
+                                      f"tcp {match.group('port')} {match.group('port2')}\n")
