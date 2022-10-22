@@ -30,12 +30,12 @@ import re
 def generate_description_from_cdp(file_conf):
     regex = re.compile(r'(?P<device>\S+) +(?P<intfce>\S+ \S+) +(\S+) +(R S I) +(\d+) +(?P<port>\S+ \S+)')
 
-    dict_intfce = {}
+    dict_interfce = {}
 
     with open(file_conf, 'r') as file:
         for line in file:
             match = regex.search(line)
             if match:
-                dict_intfce[match.group('intfce')] = (f"description Connected to {match.group('device')} "
+                dict_interfce[match.group('intfce')] = (f"description Connected to {match.group('device')} "
                                                       f"port {match.group('port')}")
-    return dict_intfce
+    return dict_interfce
