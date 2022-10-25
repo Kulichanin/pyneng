@@ -44,8 +44,46 @@
 """
 
 import glob
+import re
+import csv
 
 sh_version_files = glob.glob("sh_vers*")
 # print(sh_version_files)
 
 headers = ["hostname", "ios", "image", "uptime"]
+
+
+def parse_sh_version(files_parse):
+    regex = re.compile(r'Cisco IOS Software, \d+ \S+ \S+ Version (?P<IOS>\S+),[\s\S]*'
+                       r'router uptime is (?P<uptime>([\w ]*, [\w ]*, [\w ]*))[\s\S]*'
+                       r'System image file is "(?P<image>(\S+))"')
+    with open(files_parse, 'r') as file:
+        for match in regex.finditer(file.read()):
+            return match.group('IOS', 'image', 'uptime')
+    """   
+    Код преподавателя который корректный в тестах
+    for match in regex.finditer(files_parse):
+        return match.group('IOS', 'image', 'uptime')
+    """
+
+def write_inventory_to_csv(data_filenames, csv_filename):
+    with open(csv_filename, 'w') as file:
+        writer = csv.writer(file, quoting=csv.QUOTE_NONNUMERIC)
+        writer.writerow(headers)
+
+        for data in data_filenames:
+            parse_file = parse_sh_version(data)
+            writer.writerow([data[-6:-4]] + list(parse_file))
+    """   
+        Код преподавателя который корректный в тестах
+        Судя по дебагам обработка файла тут а не в функции write_inventory_to_csv
+        for data in data_filenames:
+            with open(data) as file:
+                parse_file = parse_sh_version(file.read())
+                if parse_file:
+                    writer.writerow([data[-6:-4]] + list(parse_file))
+    """
+
+if __name__ == "__main__":
+    sh_version_files = glob.glob("sh_vers*")
+    write_inventory_to_csv(sh_version_files, "routers_inventory.csv")
