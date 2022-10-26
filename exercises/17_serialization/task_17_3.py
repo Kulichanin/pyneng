@@ -24,3 +24,14 @@ R6           Fa 0/2          143           R S I           2811       Fa 0/0
 
 Проверить работу функции на содержимом файла sh_cdp_n_sw1.txt
 """
+import re
+
+def parse_sh_cdp_neighbors(command_output):
+        
+        regex = re.compile(r'(?P<Device>SW\d|R\d) *(?P<Local>Eth \S+) [*\S ]*(?P<port>Eth \S+)')
+
+        with open(command_output, 'r') as file:
+                for match in regex.findall(file.read()):
+                        print(match)
+
+parse_sh_cdp_neighbors('sh_cdp_n_sw1.txt')
