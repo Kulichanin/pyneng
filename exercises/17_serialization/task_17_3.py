@@ -27,11 +27,21 @@ R6           Fa 0/2          143           R S I           2811       Fa 0/0
 import re
 
 def parse_sh_cdp_neighbors(command_output):
-        
-        regex = re.compile(r'(?P<Device>SW\d|R\d) *(?P<Local>Eth \S+) [*\S ]*(?P<port>Eth \S+)')
 
-        with open(command_output, 'r') as file:
-                for match in regex.findall(file.read()):
-                        print(match)
+        regex = re.compile(
+        r"(?P<r_dev>\w+)  +(?P<l_intf>\S+ \S+)"
+        r"  +\d+  +[\w ]+  +\S+ +(?P<r_intf>\S+ \S+)"
+        )
 
-parse_sh_cdp_neighbors('sh_cdp_n_sw1.txt')
+        dict_values = {}
+
+        name_dev = re.search(r"(\S+)[>#]", command_output).group(1)
+        dict_values[name_dev] = {}
+        for match in regex.finditer(command_output):
+                r_dev, l_intf, r_intf = match.group("r_dev", "l_intf", "r_intf")
+                dict_values[name_dev][l_intf] = {r_dev: r_intf}
+        return dict_values
+
+if __name__ == "__main__":
+    with open("sh_cdp_n_sw1.txt") as f:
+        print(parse_sh_cdp_neighbors(f.read()))
