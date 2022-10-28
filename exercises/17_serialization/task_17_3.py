@@ -42,6 +42,6 @@ def parse_sh_cdp_neighbors(command_output):
                 dict_values[name_dev][l_intf] = {r_dev: r_intf}
         return dict_values
 
-if __name__ == "__main__":
-    with open("sh_cdp_n_sw1.txt") as f:
-        print(parse_sh_cdp_neighbors(f.read()))
+# if __name__ == "__main__":
+#     with open("sh_cdp_n_sw1.txt") as f:
+        # print(parse_sh_cdp_neighbors(f.read()))
