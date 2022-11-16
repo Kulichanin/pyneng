@@ -63,8 +63,3 @@ def transform_topology(topology_filename):
 if __name__ == "__main__":
     formatted_topology = transform_topology("topology.yaml")
     draw_topology(formatted_topology)
-
-
-                
-
-transform_topology('topology.yaml')

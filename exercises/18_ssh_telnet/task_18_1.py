@@ -18,7 +18,10 @@
 
 """
 import yaml
+import netmiko
 
+def send_show_command(dev,command):
+    
 
 
 if __name__ == "__main__":
