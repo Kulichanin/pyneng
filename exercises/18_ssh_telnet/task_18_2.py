@@ -46,3 +46,12 @@ R1#
 """
 
 commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
+
+def send_config_commands(device, config_commands):
+    #Нужно написать код который принимает параметры устройства, набор команд и выполняет. об этом было в книге.
+    pass
+
+    
+    
+if __name__ == "__main__":
+    send_config_commands()
