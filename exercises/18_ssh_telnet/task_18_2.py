@@ -47,11 +47,18 @@ R1#
 
 commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
 
+from netmiko import ConnectHandler
+from yaml import safe_load
+
 def send_config_commands(device, config_commands):
-    #Нужно написать код который принимает параметры устройства, набор команд и выполняет. об этом было в книге.
-    pass
+    with ConnectHandler(**device) as ssh:
+        ssh.enable()
+        result = ssh.send_config_set(config_commands)
+    return result
 
     
-    
 if __name__ == "__main__":
-    send_config_commands()
+    with open("/home/kdv/pyneng/exercises/18_ssh_telnet/devices.yaml") as file:
+        devices = safe_load(file)
+    for device in devices:
+        result = send_config_commands(device, commands)
