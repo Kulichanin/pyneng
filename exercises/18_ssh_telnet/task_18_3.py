@@ -50,3 +50,29 @@ Out[16]: 'config term\nEnter configuration commands, one per line.  End with CNT
 
 commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
 command = "sh ip int br"
+
+from task_18_1a import send_show_command
+from task_18_2a import send_config_commands
+from yaml import safe_load
+
+def send_commands(device, * ,show=None, config=None):
+    match(device, show, config):
+        case(device, show, None):
+            result = send_show_command(device, show)
+            print(result)
+            return result
+        case(device, None, config):
+            result = send_config_commands(device, config)
+            print(result)
+            return result
+        case _:
+            raise ValueError("The function expects to receive 2 arguments received 3")
+
+if __name__ == "__main__":
+    with open("/home/kdv/pyneng/exercises/18_ssh_telnet/devices.yaml") as file:
+        devices = safe_load(file)
+    for device in devices:
+        send_commands(device, show=command) # send_show_command
+        send_commands(device, config=commands) #send_config_commands
+        send_commands(device, show=command, config=commands) #ValueErrro
+    
