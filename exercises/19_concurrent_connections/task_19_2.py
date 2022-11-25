@@ -34,3 +34,35 @@ Ethernet0/1                unassigned      YES NVRAM  administratively down down
 
 Проверить работу функции на устройствах из файла devices.yaml
 """
+from concurrent.futures import ThreadPoolExecutor
+from yaml import safe_load
+from netmiko import ConnectHandler
+
+import logging
+
+logging.getLogger('paramiko').setLevel(logging.WARNING)
+
+logging.basicConfig(
+    # format='%(threadName) s%(name)s %(levelname)s: %(massage)s', # узнать как тут чего! Эксперименты
+    level=logging.INFO,
+    )
+
+
+def send_show_commmand(device, command):
+    with ConnectHandler(**device) as ssh:
+        ssh.enable
+        result = ssh.send_command(command)
+        return result
+
+def send_show_command_to_devices(devices, command, filename=None, limit=3):
+
+    with ThreadPoolExecutor(max_workers=limit) as executor:
+        for device in devices:
+            request = executor.submit(send_show_commmand, device, command)
+            logging.info(request.result())
+
+
+if __name__== '__main__':
+    with open('/home/kdv/pyneng/exercises/19_concurrent_connections/devices.yaml') as file:
+        devices = safe_load(file)
+    send_show_command_to_devices(devices, 'sh ip int br')
