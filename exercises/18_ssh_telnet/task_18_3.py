@@ -75,4 +75,3 @@ if __name__ == "__main__":
         send_commands(device, show=command) # send_show_command
         send_commands(device, config=commands) #send_config_commands
         send_commands(device, show=command, config=commands) #ValueErrro
-    

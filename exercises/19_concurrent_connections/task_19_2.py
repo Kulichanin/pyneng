@@ -50,19 +50,23 @@ logging.basicConfig(
 
 def send_show_commmand(device, command):
     with ConnectHandler(**device) as ssh:
-        ssh.enable
+        ssh.enable()
+        name_device = ssh.find_prompt()
         result = ssh.send_command(command)
-        return result
+        return name_device, result
 
-def send_show_command_to_devices(devices, command, filename=None, limit=3):
+def send_show_command_to_devices(devices, command, filename, limit=3):
 
     with ThreadPoolExecutor(max_workers=limit) as executor:
-        for device in devices:
-            request = executor.submit(send_show_commmand, device, command)
-            logging.info(request.result())
+        with open(f'{filename}', 'w') as file:    
+            for device in devices:
+                request = executor.submit(send_show_commmand, device, command)
+                logging.info(request.result())
+                file.write(f'{request.result()[0]}{command}\n')
+                file.writelines(f'{request.result()[1]}\n')
 
 
-if __name__== '__main__':
+"""if __name__== '__main__':
     with open('/home/kdv/pyneng/exercises/19_concurrent_connections/devices.yaml') as file:
         devices = safe_load(file)
-    send_show_command_to_devices(devices, 'sh ip int br')
+    send_show_command_to_devices(devices, 'sh ip int br', "test.txt")"""
