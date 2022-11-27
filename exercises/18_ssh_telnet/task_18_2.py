@@ -47,6 +47,8 @@ R1#
 
 commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
 
+# commands = ["conf t", "router ospf 1", "passive-interface default", "no passive-interface gi0/0", "network 0.0.0.0 255.255.255.255 area 0", "exit", "wr mem", "copy running-config startup-config"]
+
 from netmiko import ConnectHandler
 from yaml import safe_load
 
