@@ -48,7 +48,7 @@ commands = {
     "192.168.100.2": "sh int desc",
 }
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from yaml import safe_load
 from netmiko import ConnectHandler
 

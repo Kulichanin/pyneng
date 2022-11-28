@@ -105,3 +105,22 @@ R3#
 
 Для выполнения задания можно создавать любые дополнительные функции.
 """
+
+# Создать несколько функций и образаться к ним в функции send_commands_to_devices. 
+# Функция запросов в несколько потоков.Функция отправки команды на устройство. 
+# Можно взять из задач task_19_3.py или task_19_3a.py
+
+
+
+def send_commands_to_devices(devices, filename=None, *, show=None, config=None, limit=3):
+    match(show, config):
+        case(show, None):
+            print('function show')
+        case(None, config):
+            print('function config')
+        case _:
+            raise ValueError("The function expects to receive -> show or -> config, but not both at once!")
+
+# send_commands_to_devices("devices", show='result.txt')
+# send_commands_to_devices("devices", config='sh clock')
+# send_commands_to_devices("devices", show='result.txt', config='sh clock')

@@ -56,3 +56,37 @@ commands = {
     "192.168.100.1": ["sh ip int br", "sh int desc"],
     "192.168.100.2": ["sh int desc"],
 }
+
+from concurrent.futures import ThreadPoolExecutor
+from yaml import safe_load
+from netmiko import ConnectHandler
+
+import logging
+
+logging.getLogger('paramiko').setLevel(logging.WARNING)
+
+logging.basicConfig(
+  level=logging.INFO,
+)
+
+def send_show_command(device, command):
+  with ConnectHandler(**device) as ssh:
+    ssh.enable()
+    name_device = ssh.find_prompt()
+    result = ssh.send_command(command)
+  return name_device, command, result
+
+def send_command_to_devices(devices, commands_dict, filename, limit=3):
+  with ThreadPoolExecutor(max_workers=limit) as executor:
+    with open(filename, 'w') as file:
+      for device in devices:
+        for command in commands_dict[device['host']]:
+          request = executor.submit(send_show_command, device, command)
+          logging.info(request.result())
+          file.write(f'{request.result()[0]}{request.result()[1]}\n')
+          file.writelines(f'{request.result()[2]}\n')
+
+if __name__== '__main__':
+    with open('/home/kdv/pyneng/exercises/19_concurrent_connections/devices.yaml') as file:
+        devices = safe_load(file)
+    send_command_to_devices(devices, commands, "/home/kdv/pyneng/exercises/19_concurrent_connections/test_19_3a_.txt")

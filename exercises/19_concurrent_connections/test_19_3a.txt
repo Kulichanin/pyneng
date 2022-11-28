@@ -1,0 +1,32 @@
+R1#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         192.168.100.1   YES NVRAM  up                    up      
+GigabitEthernet0/1         unassigned      YES NVRAM  administratively down down    
+GigabitEthernet0/2         unassigned      YES NVRAM  administratively down down    
+GigabitEthernet0/3         unassigned      YES NVRAM  administratively down down    
+R1#sh int desc
+Interface                      Status         Protocol Description
+Gi0/0                          up             up       
+Gi0/1                          admin down     down     
+Gi0/2                          admin down     down     
+Gi0/3                          admin down     down     
+R2#sh int desc
+Interface                      Status         Protocol Description
+Gi0/0                          up             up       
+Gi0/1                          admin down     down     
+Gi0/2                          admin down     down     
+Gi0/3                          admin down     down     
+R3#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         192.168.100.3   YES NVRAM  up                    up      
+GigabitEthernet0/1         unassigned      YES NVRAM  administratively down down    
+GigabitEthernet0/2         unassigned      YES NVRAM  administratively down down    
+GigabitEthernet0/3         unassigned      YES NVRAM  administratively down down    
+R3#sh ip route | ex -
+
+Gateway of last resort is not set
+
+      192.168.100.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.100.0/24 is directly connected, GigabitEthernet0/0
+L        192.168.100.3/32 is directly connected, GigabitEthernet0/0
+
