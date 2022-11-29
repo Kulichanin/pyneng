@@ -1,0 +1,18 @@
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#router ospf 55
+R1(config-router)#network 0.0.0.0 255.255.255.255 area 0
+R1(config-router)#end
+R1#
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#router ospf 55
+R2(config-router)#network 0.0.0.0 255.255.255.255 area 0
+R2(config-router)#end
+R2#
+configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R3(config)#router ospf 55
+R3(config-router)#network 0.0.0.0 255.255.255.255 area 0
+R3(config-router)#end
+R3#

@@ -106,21 +106,51 @@ R3#
 Для выполнения задания можно создавать любые дополнительные функции.
 """
 
-# Создать несколько функций и образаться к ним в функции send_commands_to_devices. 
-# Функция запросов в несколько потоков.Функция отправки команды на устройство. 
-# Можно взять из задач task_19_3.py или task_19_3a.py
+from netmiko import ConnectHandler
+from concurrent.futures import ThreadPoolExecutor
+from yaml import safe_load
 
+import logging
 
+logging.getLogger('paramiko').setLevel(logging.WARNING)
+
+logging.basicConfig(
+    level=logging.INFO,
+)
+def send_command(device,command=None,commands=None):
+    with ConnectHandler(**device) as ssh:
+        ssh.enable()
+        name_device = ssh.find_prompt()
+        match(command, commands):
+            case(command, None):
+                result = ssh.send_command(command)
+                return name_device, command, result
+            case(None, commands):
+                result = ssh.send_config_set(commands)
+                return result
 
 def send_commands_to_devices(devices, filename=None, *, show=None, config=None, limit=3):
-    match(show, config):
-        case(show, None):
-            print('function show')
-        case(None, config):
-            print('function config')
-        case _:
-            raise ValueError("The function expects to receive -> show or -> config, but not both at once!")
+    with ThreadPoolExecutor(max_workers=limit) as executor:
+        match(show, config):
+            case(show, None):
+                requests = [executor.submit(send_command,device,command=show) for device in devices]
+                with open(filename, 'w') as file:
+                    for request in requests:
+                        logging.info(request.result())
+                        file.write(f'{request.result()[0]}{request.result()[1]}\n')
+                        file.writelines(f'{request.result()[2]}\n')
+            case(None, config):
+                requests = [executor.submit(send_command,device,commands=config) for device in devices]
+                with open(filename, 'w') as file:
+                    for request in requests:
+                        logging.info(request.result())
+                        file.write(f'{request.result()}\n')
+            case _:
+                raise ValueError("The function expects to receive -> show or -> config, but not both at once!")
 
-# send_commands_to_devices("devices", show='result.txt')
-# send_commands_to_devices("devices", config='sh clock')
-# send_commands_to_devices("devices", show='result.txt', config='sh clock')
+
+if __name__ == '__main__':
+    with open('/home/kdv/pyneng/exercises/19_concurrent_connections/devices.yaml') as file:
+        devices = safe_load(file)
+    commands = ['router ospf 55', 'network 0.0.0.0 255.255.255.255 area 0']    
+    send_commands_to_devices(devices, "/home/kdv/pyneng/exercises/19_concurrent_connections/test_19_4.txt", config=commands)
