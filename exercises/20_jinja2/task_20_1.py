@@ -17,8 +17,13 @@
 указывать текущий каталог в FileSystemLoader - то есть НЕ надо делать так FileSystemLoader(".").
 Указание текущего каталога, сломает работу других заданий/тестов.
 """
+from jinja2 import Environment, FileSystemLoader
 import yaml
 
+def generate_config(template, data_dict):
+    env = Environment(loader=FileSystemLoader("/home/kdv/pyneng/exercises/20_jinja2/"))
+    temp = env.get_template(template)
+    return temp.render(data_dict)
 
 # так должен выглядеть вызов функции
 if __name__ == "__main__":
