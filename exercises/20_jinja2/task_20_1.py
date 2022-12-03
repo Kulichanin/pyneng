@@ -21,7 +21,8 @@ from jinja2 import Environment, FileSystemLoader
 import yaml
 
 def generate_config(template, data_dict):
-    env = Environment(loader=FileSystemLoader("/home/kdv/pyneng/exercises/20_jinja2/"))
+    env = Environment(loader=FileSystemLoader("/home/kdv/pyneng/exercises/20_jinja2/"),
+    trim_blocks=True,lstrip_blocks=True)
     temp = env.get_template(template)
     return temp.render(data_dict)
 

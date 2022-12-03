@@ -55,3 +55,13 @@ interface Fa0/1.100
 interface Fa0/1.200
  ip ospf hello-interval 1
 """
+from task_20_1 import generate_config
+from yaml import safe_load
+
+
+if __name__ == "__main__":
+    data_file = "data_files/ospf.yml"
+    template_file = "templates/ospf.txt"
+    with open(data_file) as f:
+        data = safe_load(f)
+    print(generate_config(template_file, data))
