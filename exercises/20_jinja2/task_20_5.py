@@ -35,3 +35,17 @@ data = {
     "tun_ip_1": "10.0.1.1 255.255.255.252",
     "tun_ip_2": "10.0.1.2 255.255.255.252",
 }
+from jinja2 import Environment, FileSystemLoader
+from pprint import pprint
+
+def create_vpn_config(template1, template2, data_dict):
+    env = Environment(loader=FileSystemLoader("/home/kdv/pyneng/exercises/20_jinja2/"))
+    temp1 = env.get_template(template1)
+    temp2 = env.get_template(template2)
+    return temp1.render(data_dict), temp2.render(data_dict)
+
+# так должен выглядеть вызов функции
+if __name__ == "__main__":
+    template_file1 = "templates/gre_ipsec_vpn_1.txt"
+    template_file2 = "templates/gre_ipsec_vpn_2.txt"
+    pprint(create_vpn_config(template_file1, template_file2, data))
