@@ -44,13 +44,13 @@ from yaml import safe_load
 from pprint import pprint
 
 
-def send_and_parse_command_parallel(devices, command, templates_path, limit=3):
-
+def send_and_parse_command_parallel(devices, command, templates_path=None, limit=3):
     with ThreadPoolExecutor(max_workers=limit) as executor:
+        dict_res = {}
         for device in devices:
-            results = executor.submit(send_and_parse_show_command,device,command)
-        # return [dict(zip((device['host']), row.result())) for row, device in requests, devices]
-        return {device['host']: results.result()}
+            res = executor.submit(send_and_parse_show_command,device,command, templates_path=templates_path)
+            dict_res[device['host']] =  res.result()
+    return dict_res
 
 if __name__ == '__main__':
     with open("devices.yaml") as values:
