@@ -44,3 +44,28 @@ topology_example = {
     ("SW1", "Eth0/2"): ("R2", "Eth0/0"),
     ("SW1", "Eth0/3"): ("R3", "Eth0/0"),
 }
+from pprint import pprint
+
+
+class Topology:
+
+    def __init__(self, topology):
+
+        for key in list(topology.keys()):
+            for value in list(topology.values()):
+                if value == key: topology.pop(value)
+        self.topology = topology
+"""
+    Вариант решения преподавателя:
+    def __init__(self, topology_dict):
+            self.topology = {}
+            for local, remote in topology_dict.items():
+                if not self.topology.get(remote) == local:
+                    self.topology[local] = remote
+"""
+
+
+if __name__ == "__main__":
+    top1 = Topology(topology_example)
+    pprint(top1.topology)
+
