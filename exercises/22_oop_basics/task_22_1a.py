@@ -26,3 +26,22 @@ topology_example = {
     ("SW1", "Eth0/2"): ("R2", "Eth0/0"),
     ("SW1", "Eth0/3"): ("R3", "Eth0/0"),
 }
+
+
+from pprint import pprint
+
+
+class Topology:
+    def __init__(self, topology_dict):
+        self.topology = self._normalize(topology_dict)
+
+    def _normalize(self, topology_dict):
+        for key in list(topology_dict.keys()):
+            for value in list(topology_dict.values()):
+                if value == key: topology_dict.pop(value)
+        return topology_dict
+
+
+if __name__ == "__main__":
+    top1 = Topology(topology_example)
+    pprint(top1.topology)

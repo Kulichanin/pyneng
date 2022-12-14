@@ -56,7 +56,7 @@ class Topology:
                 if value == key: topology.pop(value)
         self.topology = topology
 """
-    Вариант решения преподавателя:
+    Вариант решения преподавателя
     def __init__(self, topology_dict):
             self.topology = {}
             for local, remote in topology_dict.items():
