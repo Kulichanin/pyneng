@@ -57,31 +57,35 @@ class CiscoTelnet:
 
    def send_show_command(self, command, parse=True,templates="/home/kdv/pyneng/exercises/22_oop_basics/templates",index="index"):
       attributes = {"Command": command, "Vendor": 'cisco_ios'}
-   
-      if type(command) == list:
-         self._write_line('conf t')
-         self._telnet.read_until(b'#')
-         for com in command:   
-            com = self._write_line(com)
-            output = self._telnet.read_until(b"#").decode('utf-8')
-            return output.replace("\r\n", "\n")
-
+      
       self._write_line(command)
       output = self._telnet.read_until(b"#").decode('utf-8')
       if parse:
          cli_table = clitable.CliTable(index, templates)
          cli_table.ParseCmd(output, attributes)
-         return [dict(zip(cli_table.header, raw)) for raw in cli_table]
+         return [dict(zip(cli_table.header, row)) for row in cli_table] 
+      return output.replace("\r\n", "\n")
+
+   def send_config_commands(self, commands):
+      self._telnet.write(b'conf t\n')
+      if type(commands) == list:
+         for command in commands:
+            self._write_line(command)
+      else:
+         self._write_line(commands)
+      self._telnet.write(b'end\n')
+      time.sleep(1)
+      output = self._telnet.read_very_eager().decode('utf-8')
       return output.replace("\r\n", "\n")
 
 
 if __name__ == '__main__':
-  r1_params = {
-  'ip': '192.168.100.1',
-  'username': 'cisco',
-  'password': 'cisco',
-  'secret': 'cisco'}
+   r1_params = {
+   'ip': '192.168.100.1',
+   'username': 'cisco',
+   'password': 'cisco',
+   'secret': 'cisco'}
 
-  r1 = CiscoTelnet(**r1_params)
-#   pprint(r1.send_show_command('sh ip int br'))
-  pprint(r1.send_show_command(['interface loop55', 'ip address 5.5.5.5 255.255.255.255']))
+   r1 = CiscoTelnet(**r1_params)
+   print(r1.send_config_commands('logging 10.1.1.1'))
+   print(r1.send_config_commands(['interface loop55', 'ip address 5.5.5.5 255.255.255.255']))
