@@ -75,3 +75,52 @@ topology_example2 = {
     ("R1", "Eth0/4"): ("R7", "Eth0/0"),
     ("R1", "Eth0/6"): ("R9", "Eth0/0"),
 }
+from pprint import pprint
+
+
+class Topology:
+    def __init__(self, topology_dict):
+        self.topology = self._normalize(topology_dict)
+
+    def __add__(self, other):
+        result_sum = list(self.topology.items()) + list(other.topology.items())
+        return Topology(dict(result_sum))
+
+    def _normalize(self, topology_dict):
+        for key in list(topology_dict.keys()):
+            for value in list(topology_dict.values()):
+                if value == key: topology_dict.pop(value)
+        return topology_dict
+
+    def delete_link(self, *delete_link):
+        if self.topology.get(delete_link[0]) != None:
+            self.topology.pop(delete_link[0])
+        elif self.topology.get(delete_link[1]) != None:
+            self.topology.pop(delete_link[1])
+        else:
+            print("Такого соединения нет")
+    
+    def delete_node(self, name_node):
+        dict_copy = self.topology.copy()
+        for i,j in self.topology.items():
+            if name_node in j:
+                dict_copy.pop(i)
+        if self.topology == dict_copy:
+            print('Такого устройства нет')
+        else:
+            self.topology = dict_copy
+    
+    def add_link(self,*link):
+        if (self.topology.get(link[0]) != None) and (link[1] in self.topology.values()):
+            print('Такое соединение существует')
+        elif (self.topology.get(link[0]) != None) or (link[1] in self.topology.values()):
+            print('Соединение с одним из портов существует')
+        else:
+            self.topology[link[0]] = link[1]
+
+
+if __name__ == "__main__":
+    t1 = Topology(topology_example)
+    t2 = Topology(topology_example2)
+    t3 = t1 + t2
+    pprint(t3.topology)
